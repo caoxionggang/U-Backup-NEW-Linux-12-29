@@ -1,0 +1,1 @@
+spawn ssh -p 22 bluseayan@192.168.0.114 route

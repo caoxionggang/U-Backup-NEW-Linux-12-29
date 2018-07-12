@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>time</title>
+</head>
+<body>
+备份间隔：<div><input type="text" id="dis">天</div>
+备份次数：<div><input type="text" id="times">次</div>
+<button id="confirm" onClick="timeSeries()">确定</button>
+<script type="text/javascript">
+    function timeSeries(){
+        var dis = $("#dis").val().trim();
+        var times = $("#times").val().trim();
+        console.log(dis);
+        console.log(times);
+        var oDate = new Date();
+        console.log(oDate);
+        for(var i = 0;i < times; i++){
+            oDate.setTime(oDate.getTime() + dis * 24 * 60 * 60 * 1000);
+            var year = oDate.getFullYear();   //获取系统的年；
+            var month = oDate.getMonth()+1;   //获取系统月份，由于月份是从0开始计算，所以要加1
+            var day = oDate.getDate(); // 获取系统日，
+            var hour = oDate.getHours(); //获取系统时，
+            var minute = oDate.getMinutes(); //分
+            var second = oDate.getSeconds(); //秒
+            if(month < 10){
+                var month = '0' + month.toString();
+            }
+            if(day < 10){
+                var day = '0' + day.toString();
+            }
+            if(hour < 10){
+                var hour = '0' + hour.toString();
+            }
+            if(minute < 10){
+                var minute = '0' + minute.toString();
+            }
+            if(second < 10){
+                var second = '0' + second.toString();
+            }
+            var time = year + '-' + month + '-' + day +  ' ' + hour + ':' + minute + ':' + second;
+            console.log(time);
+            month = parseInt(month);
+            day = parseInt(day);
+            hour = parseInt(hour);
+            minute = parseInt(minute);
+            second = parseInt(second);
+        }
+    }
+
+
+</script>
+<script src="../js/lib/jquery-1.8.0.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Index</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            padding-top:60px;
+            padding-bottom:40px;
+        }
+    </style>
+    <link rel='stylesheet' href='./css/style.css' />
+    <script src="./js/base.js"></script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner" style="background:black">
+        <div class="container">
+            <div class="nav-collapse" ><br/>
+                <p style="float:left"><a id="top_bar1">U-BackUp管理系统&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar2">首页&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar3">登入&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar4">注册&nbsp&nbsp</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="container" class="container">
+    <div class="hero-unit jumbotron">
+        <h1>欢迎来到U-BackUp管理系统</h1>
+        <br/>
+        <p>
+            <a id="login" class="btn btn-primary btn-large">登录</a>
+            <a id="registry" class="btn btn-large">立即注册</a>
+        </p>
+    </div>
+</div>
+
+<!--页脚内容-->
+<div  class="navbar navbar-default navbar-fixed-bottom" style="background-color:#2e2e2e;">
+    <p style="text-align:center;padding-top:15px;color:lightblue"><a href="#">@copyright CXG </a>2017</p>
+</div>
+
+<script>
+    var httpHost = location.href.replace(location.hash, '');
+    window.onload = function() {
+
+        $('#top_bar3').on('click', function(){
+            window.location.href='login.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar4').on('click', function(){
+            window.location.href='registry.html';
+        }).css("cursor", "pointer");
+
+        $('#login').on('click', function(){
+            window.location.href='login.html';
+        });
+
+        $('#registry').on('click', function(){
+            window.location.href='registry.html';
+        });
+    }
+
+</script>
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="js/layer-v3.1.0/layer/layer.js"></script>  <!--提示信息弹窗-->
+<script src="js/lib/NoSleep.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+</body>
+</html>

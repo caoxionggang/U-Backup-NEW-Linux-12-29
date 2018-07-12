@@ -1,0 +1,13 @@
+{
+  "name": "chatofpomelo",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "async": "^2.5.0",
+    "connect": ">=0.0.1",
+    "express": "3.x",
+    "generic-pool": "1.0.9",
+    "mysql": ">=2.0",
+    "jquery": "3.2.1"
+  }
+}

@@ -1,0 +1,49 @@
+spawn ssh -p 22 cao@127.0.0.1 route
+ssh: connect to host 127.0.0.1 port 22: Connection refused
+expect: spawn id exp5 not open
+    while executing
+"expect eof"
+    (file "./shell/routing.sh" line 20)
+spawn ssh -p 22 cao@127.0.0.1 route
+ssh: connect to host 127.0.0.1 port 22: Connection refused
+expect: spawn id exp5 not open
+    while executing
+"expect eof"
+    (file "./shell/routing.sh" line 20)
+spawn ssh -p 22 cao@127.0.0.1 route
+ssh: connect to host 127.0.0.1 port 22: Connection refused
+expect: spawn id exp5 not open
+    while executing
+"expect eof"
+    (file "./shell/routing.sh" line 20)
+spawn ssh -p 22 cao@127.0.0.1 route
+ssh: connect to host 127.0.0.1 port 22: Connection refused
+expect: spawn id exp5 not open
+    while executing
+"expect eof"
+    (file "./shell/routing.sh" line 20)
+spawn ssh -p 22 cao@127.0.0.1 route
+ssh: connect to host 127.0.0.1 port 22: Connection refused
+expect: spawn id exp5 not open
+    while executing
+"expect eof"
+    (file "./shell/routing.sh" line 20)
+spawn ssh -p 22 cao@127.0.0.1 route
+ssh: connect to host 127.0.0.1 port 22: Connection refused
+expect: spawn id exp5 not open
+    while executing
+"expect eof"
+    (file "./shell/routing.sh" line 20)
+spawn ssh -p 22 cao@127.0.0.1 route
+ssh: connect to host 127.0.0.1 port 22: Connection refused
+expect: spawn id exp5 not open
+    while executing
+"expect eof"
+    (file "./shell/routing.sh" line 20)
+spawn ssh -p 22 bluseayan@192.168.0.114 route
+bluseayan@192.168.0.114's password: 
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+default         gateway         0.0.0.0         UG    600    0        0 wlp5s0
+link-local      *               255.255.0.0     U     1000   0        0 wlp5s0
+192.168.0.0     *               255.255.255.0   U     600    0        0 wlp5s0

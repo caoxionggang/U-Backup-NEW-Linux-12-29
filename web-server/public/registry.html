@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Registry</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            padding-top:60px;
+            padding-bottom:40px;
+        }
+    </style>
+    <link rel='stylesheet' href='./css/style.css' />
+    <script src="./js/base.js"></script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner" style="background:black">
+        <div class="container">
+            <div class="nav-collapse" ><br/>
+                <p style="float:left"><a id="top_bar1">U-BackUp管理系统&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar2">首页&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar3">登入&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar4">注册&nbsp&nbsp</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="app" class="hero-unit jumbotron container" >
+    <div id="loginView">
+        <div id="loginTitle">
+            新用户注册
+        </div>
+        <br/>
+        <table>
+            <tr>
+                <td>
+                    <input id="loginUser" type="text" placeholder="用户名" style="width:300px;height:30px"/>
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputName' style="display:none; color:#ff0000;">请输入用户名</span>
+                    <span id = 'nameExist' style="display:none; color:#ff0000;">用户名已存在</span>
+                    <span id = 'createFolder' style="display:none; color:#ff0000;">注册失败，请重试</span>
+                    <span id="name_length" style="display:none; color:#ff0000;">用户名不能超过30位</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="channels" type="password" id="channelList_1" placeholder="输入密码" style="width:300px;height:30px"/>
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputPass' style="display:none; color:#ff0000;">请输入密码</span>
+                    <span id="PassLength" style="display:none; color:#ff0000;">密码需大于等于6位</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="channels" type="password" id="channelList_2" placeholder="确认密码" style="width:300px;height:30px"/>
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputPassAgain' style="display:none; color:#ff0000;">请重新输入密码</span>
+                    <span id="WrongRePass" style="display:none; color:#ff0000;">前后密码不一致</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="register" class="btn btn-primary btn-large">注册</button>
+                    <a id="login" background-color="blue">去登陆</a>
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'systemErr' style="display:none; color:#ff0000;">系统错误</span>
+                </td>
+            </tr>
+        </table>
+        <div id="loginError">
+        </div>
+    </div>
+</div>
+
+<!--页脚内容-->
+<div  class="navbar navbar-default navbar-fixed-bottom" style="background-color:#2e2e2e;">
+    <p style="text-align:center;padding-top:15px;color:lightblue"><a href="#">@copyright CXG </a>2017</p>
+</div>
+
+<script>
+    var httpHost = location.href.replace(location.hash, '');
+
+    function check(){
+        $("#inputName").hide();
+        $("#nameExist").hide();
+        $("#createFolder").hide();
+        $("#name_length").hide();
+        $("#inputPass").hide();
+        $("#PassLength").hide();
+        $("#inputPassAgain").hide();
+        $("#WrongRePass").hide();
+        $("#systemErr").hide();
+    }
+
+    window.onload = function() {
+
+        $('#top_bar1').on('click', function(){
+            window.location.href='/index.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar2').on('click', function(){
+            window.location.href='/index.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar3').on('click', function(){
+            window.location.href='/login.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar4').on('click', function(){
+            window.location.href='/registry.html';
+        }).css("cursor", "pointer");
+
+        $('#login').on('click', function(){
+            window.location.href='/login.html';
+        }).css("cursor", "pointer");
+
+        $('#register').on('click', function(){
+            var name = $('#loginUser').val().trim();
+            var pwd = $('#channelList_1').val().trim();
+            var pwd2 = $('#channelList_2').val().trim();
+            var pwd_length=pwd.length;
+            var name_length=name.length;
+            if(name === ''){
+                check();
+                $("#inputName").show();
+                loading = false;
+            }else{
+                if(pwd === ''){
+                    check();
+                    $("#inputPass").show();
+                    loading = false;
+                }else{
+                    if (pwd2 === '') {
+                        check();
+                        $("#inputPassAgain").show();
+                        loading = false;
+                    }else{
+                        if(pwd != pwd2){
+                            check();
+                            $('#WrongRePass').show();
+                            loading = false;
+                        }else{
+                            if(pwd_length<6 ||name_length>30){
+                                if(pwd_length<6){
+                                    check();
+                                    $('#PassLength').show();
+                                    return;
+                                }else if(name_length>30){
+                                    check();
+                                    $('#name_length').show();
+                                    return;
+                                }
+                            }else{
+                                var pwd = hex_sha1(pwd);
+                                console.log(pwd);
+                                $.post(httpHost + '/../register', {name: name, password: pwd, password2: pwd2}, function(data) {
+                                    if (data.code === code.RETURNCODE.NAMEEXIST) {
+                                        check();
+                                        $("#nameExist").show();
+                                        loading = false;
+                                    } else if(data.code === code.RETURNCODE.DBERROR){
+                                        check();
+                                        $("#systemErr").show();
+                                        loading = false;
+                                    } else if (data.code === code.RETURNCODE.EXPIRED) {
+                                        check();
+                                        $("#createFolder").show();
+                                    }else if (data.code === code.RETURNCODE.OK) {
+                                        check();
+                                        layer.msg("注册成功！请登录！");
+                                        setTimeout(function(){
+                                            window.location.href='/login.html';
+                                        },1000);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+</script>
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="js/layer-v3.1.0/layer/layer.js"></script>  <!--提示信息弹窗-->
+<script src="js/lib/NoSleep.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/shal.js"></script>
+</body>
+</html>

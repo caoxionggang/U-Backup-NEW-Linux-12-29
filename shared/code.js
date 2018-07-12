@@ -1,0 +1,95 @@
+//exports.name = 'abc';
+
+module.exports = {
+	OK: 200, 
+	FAIL: 500, 
+
+	ENTRY: {
+		FA_TOKEN_INVALID: 	1001, 
+		FA_TOKEN_EXPIRE: 	1002, 
+		FA_USER_NOT_EXIST: 	1003
+	}, 
+
+	GATE: {
+		FA_NO_SERVER_AVAILABLE: 2001
+	}, 
+
+	CHAT: {
+		FA_CHANNEL_CREATE: 		3001, 
+		FA_CHANNEL_NOT_EXIST: 	3002, 
+		FA_UNKNOWN_CONNECTOR: 	3003, 
+		FA_USER_NOT_ONLINE: 	3004 
+	},
+	STATE: {
+		INIT: 					0,
+		WAIT: 					80,
+		STARTBETTING: 			10,
+		BETTING: 				20,
+		STOPBETTING:			30,
+		ANOUNCERESULT: 			40,
+		CELEBRATE:				50,
+		CLEAR: 					60,
+		GENERATESCENE:			70
+	},
+	COMMAND:{
+		HELLO:			88,
+		OPERATE: 		0,
+		LOGIN:			1,
+		LOGOUT:			2,
+		CHANGESTATE: 	3,
+		SHOWTIME: 		4,
+		SHOWBETTING:	5,
+		SHOWALLBETTING: 6,
+		SHOWUSERS:		7,
+		USERLOGIN:		8,
+		USERLOGOUT:	    9,
+		SHOWSCENE:		10,
+		SHOWRESULT:		11,
+		UPSCORE:		12,
+		DOWNSCORE:		13,
+		LIVESTREAM:		14,
+		CHAT:			15
+	},
+	USERTYPE:{
+		USER:         0,
+		SUPERVISER:    88
+	},
+	RETURNCODE:{
+		OK:         200,
+		FALL:       201,
+		EXPIRED:    300,
+		NORIGHT:    400,
+		DBERROR:    500,
+		NAMEEXIST:      501,
+		WRONGINTRODUCER:   502,
+		NONAME:             503,
+		WRONGPASS:          504,
+		ROOMIDNULL:         505,
+		NOSYSTEMNAME:    506,
+		NODEVICENAME:    507,
+		NOFILENAME:    508,
+		NOSYSTEMID:    509,
+		NODEVICEID:    510,
+		NOFILEID:    514,
+		SYSTEMNAMEEXIST:    511,
+		UPDATESUCCESS:    512,
+		UPDATEFAIL:	513,
+		RECORDEXIST:    514,
+		NOTASKS:    515,
+		EXIST:    516,
+		NOSYSTEM:   517,
+		NOFILE:   518,
+		READFAIL:   519,
+		FOLDERNAMEEXIST:   520
+	},
+	CODESTRING:{
+		OK:         '操作成功',
+		EXPIRED:    '登陆过期',
+		NORIGHT:    '越权操作',
+		DBERROR:    '数据库出错',
+		NAMEEXIST:  '用户名已存在',
+		NONAME:             '用户名不存在',
+		WRONGPASS:          '密码错误',
+	}
+
+};

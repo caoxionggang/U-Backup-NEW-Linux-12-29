@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>passModify</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            padding-top:60px;
+            padding-bottom:40px;
+        }
+    </style>
+    <link rel='stylesheet' href='./css/style.css' />
+    <script src="./js/base.js"></script>
+</head>
+<body>
+  <div id="modify" class="hero-unit container" style="margin-left:40%">
+      <p>输入原始密码：</p><input id="oldPass" type="password" />
+      <p id="oldPassWrong" style="display:none;color:red">原始密码错误</p>
+      <p>输入新密码：</p><input  id="newPass" type="password" />
+      <p>再次输入新密码：</p><input  id="passAgain" type="password" />
+      <p id="diff" style="display:none;color:red">前后密码不一致!</p>
+      <p id="passLength" style="display:none;color:red">密码需大于等于6位</p>
+      <div style="margin-top:10px"><button id="modifyPass" class="btn btn-primary btn-large">确定修改</button></div>
+  </div>
+<script>
+    var httpHost = location.href.replace(location.hash, '');
+    window.onload = function() {
+        $("#modifyPass").on('click',function(){
+            console.log("press");
+            var oldPass = $("#oldPass").val().trim();
+            var newPass = $("#newPass").val().trim();
+            var userID = sessionStorage['userID'];
+            var passAgain = $("#passAgain").val().trim();
+            console.log(oldPass);
+            console.log(newPass);
+            console.log(passAgain);
+            if(newPass !== passAgain){
+                $("#diff").show();
+                $("#oldPassWrong").hide();
+                $("#passLength").hide();
+                return;
+            }else if(!newPass && !passAgain){
+                return;
+            }else if(newPass.length < 6){
+                $("#passLength").show();
+                $("#oldPassWrong").hide();
+                $("#diff").hide();
+                return;
+            } else {
+                var oldPass_trans = hex_sha1(oldPass);
+                var newPass_trans = hex_sha1(newPass);
+                $.post(httpHost + '/../modify', {'userID':userID,'newPass_trans':newPass_trans,'oldPass_trans':oldPass_trans},function(data){
+                    if(data.code === code.RETURNCODE.OK){
+                        console.log("修改密码成功!");
+                        $("#oldPassWrong").hide();
+                        $("#diff").hide();
+                        $("#passLength").hide();
+                        layer.msg("修改密码成功!");
+                    }else if(data.code === code.RETURNCODE.ERROR){
+                        console.log("error")
+                        $("#oldPassWrong").show();
+                        $("#diff").hide();
+                    }else if(data.code === code.RETURNCODE.FAIL){
+                        console.log("fail")
+                        layer.msg("密码修改失败，请重试!")
+                    }else if(data.code === code.RETURNCODE.DBERROR){
+                        console.log("dberror")
+                        layer.msg("数据库错误");
+                    }
+                })
+            }
+        })
+    }
+</script>
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+  <script src="js/layer-v3.1.0/layer/layer.js"></script>  <!--提示信息弹窗-->
+<script src="js/lib/NoSleep.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/cookie_plugin.js"></script>
+<script src="js/shal.js"></script>
+</body>
+</html>

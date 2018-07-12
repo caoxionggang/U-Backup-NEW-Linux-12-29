@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    /*var system_backup_Frequency_array = new Array('一周(7D)','一月(30D)','三月(91D)','半年(182D)','一年(365D)');
+    var system_backup_Frequency_trans = new Array(7,30,91,182,365);
+    console.log(system_backup_Frequency_array);
+    console.log(system_backup_Frequency_trans);*/
+
+    system_backup_Frequency ='半年(182D)';
+    var system_backup_Frequency_Drop_down = new Array('一周(7D)','一月(30D)','三月(91D)','半年(182D)','一年(365D)');
+    var system_backup_Frequency_trans = new Array(7,30,91,182,365);
+    for(var z = 0;z<system_backup_Frequency_Drop_down.length;z++){
+        if(system_backup_Frequency == system_backup_Frequency_Drop_down[z]){
+            var system_backup_Frequency_dis = system_backup_Frequency_trans[z];
+            console.log(system_backup_Frequency_dis);
+            break;
+        }
+    }
+</script>
+</body>
+</html>

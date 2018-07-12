@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>test page for object fbcontrol</title>
+    </head>
+    <script type="text/javascript">
+        var ser;
+        function plugin0()
+        {
+            return document.getElementById('plugin0');
+        }
+        plugin = plugin0;
+        
+        function recv(bytes, size)
+        {
+            for(var i=0;i<size;++i)
+            {
+                console.log(bytes[i].toString(16));
+                ser.send(bytes[i]);
+            }
+            var s='0A0B';
+            var ia  = hexStrToIntArray(s);
+            console.log(ia);
+            var ss = intArrayToHexStr(ia);
+            console.log(ss);
+        }
+        
+        function pluginLoaded() 
+        {
+            console.log('OK');
+            ser = plugin().Serial;// Get a Serial object
+			ser.open("COM1");// Open a port
+			ser.set_option(9600,0,8,0,0);// Set port options
+			ser.recv_callback(recv); // Callback function for recieve data
+            pluginValid();
+        }
+
+        function pluginValid()
+        {
+            if(plugin().valid){
+                alert(plugin().echo("This plugin seems to be working!"));
+            } else {
+                alert("Plugin is not working :(");
+            }
+        }
+        function load(){
+            console.log('loading!!!');
+        }
+        function hexStrToIntArray(hexStr) {
+            var res = [];
+            for (var i = 0; i < hexStr.length; i += 2) {
+                var ts = hexStr.substring(i, 2);
+                var ti = parseInt(ts, 16);
+                res.push(ti);
+
+            }
+            return res;
+
+        }
+        function intArrayToHexStr(intArray){
+            var res = "";
+            for(var i=0; i<intArray.length;i++){
+                var ti = intArray[i];
+                var ts = ti.toString(16);
+                res += ts;
+            }
+            res.toUpperCase();
+            return res;
+        }
+    </script>
+    <body  onload = 'load()' >
+        <object id="plugin0" type="application/x-juart" width="0" height="0" >
+            <param name="onload" value="pluginLoaded"  />
+        </object><br />
+        <h1>jUART Serial Port Echo Test</h1><br/>
+        This test will echo the data you sent through serial port.
+    </body>
+</html>

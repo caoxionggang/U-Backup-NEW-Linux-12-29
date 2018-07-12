@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>LogOut</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            padding-top:60px;
+            padding-bottom:40px;
+        }
+    </style>
+    <link rel='stylesheet' href='./css/style.css' />
+    <script src="./js/base.js"></script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner" style="background:black">
+        <div class="container">
+            <div class="nav-collapse" ><br/>
+                <p style="float:left"><a id="top_bar1">U-BackUp管理系统&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar2">首页&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar3">登入&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar4">注册&nbsp&nbsp</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="container" class="container">
+    <div class="hero-unit jumbotron">
+        <h1>您已退出U-backup管理系统！</h1>
+        <p class="list-inline">
+            <a id="login" class="btn btn-primary btn-large">重新登录</a>
+            <a id="first-page" class="btn btn-primary btn-large">回首页</a>
+            <a id="ClosePage" class="btn btn-primary btn-large">关闭此页面</a>
+        </p>
+    </div>
+    <hr/>
+</div>
+
+<script>
+    var httpHost = location.href.replace(location.hash, '');
+    window.onload=function(){
+
+        $('#login').on('click',function(){
+            window.location.href='/login.html';
+        });
+
+        $('#first-page').on('click',function(){
+            window.location.href='/index.html';
+        });
+
+        $('#ClosePage').on('click',function(){
+            window.open("about:blank","_self").close();  //在火狐，谷歌浏览器下不能用window.close()来关闭非js打开的页面。IE可以用。
+        });
+
+        $('#top_bar1').on('click', function(){
+            window.location.href='/index.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar2').on('click', function(){
+            window.location.href='/index.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar3').on('click', function(){
+            window.location.href='/login.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar4').on('click', function(){
+            window.location.href='/registry.html';
+        }).css("cursor", "pointer");
+    }
+</script>
+
+<!--页脚内容-->
+<div  class="navbar navbar-default navbar-fixed-bottom" style="background-color:#2e2e2e;">
+    <p style="text-align:center;padding-top:15px;color:lightblue"><a href="#">@copyright CXG </a>2017</p>
+</div>
+
+<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+<script src="../public/stylesheets/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<html>
+<head>
+</head>
+
+<body>
+<input id="xxx" onblur="fun();" />
+
+<script>
+    function isValidIP(ip)
+    {
+        var reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+        return reg.test(ip);
+    }
+
+
+    function fun()
+    {
+        var ip = document.all.xxx.value;
+        if(isValidIP(ip))
+        {
+            alert("yes");
+        }
+        else
+        {
+            alert("no");
+        }
+    }
+
+</script>
+
+</body>
+
+</html>

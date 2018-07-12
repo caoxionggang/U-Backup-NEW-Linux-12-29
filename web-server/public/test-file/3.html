@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>检测与替换</title>
+    <style type="text/css">
+        a{
+            color:#00bc9b;
+        }
+    </style>
+</head>
+<body>
+    <a href=”22.js” download="22">22.js</a>
+    <button id="download" style="margin-left:970px;margin-bottom:10px;"><a href="F:/U-BACKUP/web-server/public/File/file1.txt" download="file1" id="download1">下载</a></button>
+    <div id="jsContainer">
+        随机文本，链接，http://www.baidu.com,或者www.baidu.com?from=onlineExam,加上链接标签，在新窗口打开链接。
+    </div>
+    <script>
+        console.log(new String('A'));
+        function  link(){
+            var jsLink = document.getElementById("jsContainer").innerHTML;
+            httpHtml(jsLink);
+            //var jsSplit = jsLink.split("www");
+            //console.log(jsSplit);
+        }
+        function httpHtml(a){
+            var reg = /(http:\/\/|https:\/\/|www:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+            a = a.replace(reg, "<a href='$1$2'>$1$2</a>"); //这里的reg就是上面的正则表达式
+            console.log(a);
+            document.getElementById("jsContainer").innerHTML = a;
+        };
+        link();
+
+    </script>
+</body>
+</html>

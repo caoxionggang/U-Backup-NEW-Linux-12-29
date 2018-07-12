@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            padding-top:60px;
+            padding-bottom:40px;
+        }
+    </style>
+    <link rel='stylesheet' href='./css/style.css' />
+    <script src="./js/base.js"></script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner" style="background:black">
+        <div class="container">
+            <div class="nav-collapse" ><br/>
+                <p style="float:left"><a id="top_bar1">U-BackUp管理系统&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar2">首页&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar3">登入&nbsp&nbsp</a></p>
+                <p style="float:left"><a id="top_bar4">注册&nbsp&nbsp</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="app" class="hero-unit jumbotron container">
+    <div id="loginView">
+        <div id="loginTitle">
+            用户登陆
+        </div>
+        <br/>
+        <table>
+            <tr>
+                <td>
+                    <input id="loginUser" type="text" placeholder="用户名" style="width:300px;height:30px"/>
+                </td>
+            </tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputName' style="display:none; color:#ff0000;">请输入用户名</span>
+                    <span id = 'noName' style="display:none; color:#ff0000;">用户名不存在，请先注册</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="channels" type="password" id="channelList" placeholder="密码" style="width:300px;height:30px"/>
+                </td>
+            <tr>
+            <tr>
+                <td style = "padding:5px 0;">
+                    <span id = 'inputPass' style="display:none; color:#ff0000;">请输入密码</span>
+                    <span id = 'wrongPass' style="display:none; color:#ff0000;">密码错误</span>
+                </td>
+            </tr>
+            <td>
+                <button id="login" class="btn btn-primary btn-large">登录</button>
+                <a id="register"  background-color="blue">去注册</a>
+            </td>
+            </tr>
+        </table>
+        <div id="loginError">
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var httpHost = location.href.replace(location.hash, '');
+    window.onload = function() {
+
+        $('#top_bar1').on('click', function () {
+            window.location.href = '/index.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar2').on('click', function () {
+            window.location.href = '/index.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar3').on('click', function () {
+            window.location.href = '/login.html';
+        }).css("cursor", "pointer");
+
+        $('#top_bar4').on('click', function () {
+            window.location.href = '/registry.html';
+        }).css("cursor", "pointer");
+
+        $('#register').on('click', function () {   //为一个点击事件。id=register处，点击“去注册”，在登陆界面跳转到注册界面
+            window.location.href = '/registry.html';
+        }).css("cursor", "pointer");
+
+        $('#login').on('click', function () {  //为一个点击事件。id=login处，点击“登录”，判断登录是否成功及其反应
+            console.log("press");
+            var username = $('#loginUser').val().trim();  //val() 方法返回用户输入的用户名，trim()方法将返回的字符串去掉首尾空格
+            var pwd = $('#channelList').val().trim();  //val() 方法返回用户输入的密码，trim()方法将返回的字符串去掉首尾空格
+            if (!username) {   //若用户名为空
+                $("#inputName").show();  //显示id=inputName处隐藏的“请输入用户名”
+                loading = false;   //
+                return;
+            } else
+                $("#inputName").hide();
+
+            if (!pwd) {  //密码为空
+                $("#inputPass").show();  //显示id=inputPass处隐藏的“请输入密码”
+                loading = false;
+                return;
+            } else
+                $("#inputPass").hide();
+
+            $.post(httpHost + '/../login', {username: username, password: hex_sha1(pwd)}, function (data) {  //将获取的用户名和密码和数据库比对，post请求与后台交互
+                if (data.code === code.RETURNCODE.NONAME) {   //三等号为严格相等
+                    $("#noName").show();
+                    loading = false;
+                    return;
+                } else
+                    $("#noName").hide();
+
+                if (data.code === code.RETURNCODE.WRONGPASS) {
+                    $("#wrongPass").show();
+                    loading = false;
+                    return;
+                } else
+                    $("#wrongPass").hide();
+
+                if (data.code === code.RETURNCODE.OK) {
+                    console.log("Login success!");
+
+                } else if (data.code === code.RETURNCODE.DBERROR) {
+                    console.log('System Error');
+                    loading = false;
+                    return;
+                }
+                window.sessionStorage.setItem('userName', data.userName);  //将用户名保存到本地
+                window.sessionStorage.setItem('passWord', data.passWord);
+                window.sessionStorage.setItem('token', data.token);
+                window.sessionStorage.setItem('userType', data.userType);
+                window.sessionStorage.setItem('userID', data.userID);
+                if(data.userType == 1){
+                    window.location.href = '/SuperUserHome.html';
+                }else if(data.userType == 0){
+                    window.location.href = '/UserHome.html';
+                }
+            });
+        });
+    }
+</script>
+
+<!--页脚内容-->
+<div  class="navbar navbar-default navbar-fixed-bottom" style="background-color:#2e2e2e;">
+    <p style="text-align:center;padding-top:15px;color:lightblue"><a href="#">@copyright CXG </a>2017</p>
+</div>
+
+<script src="js/lib/jquery-1.8.0.min.js"></script>
+<script src="js/lib/NoSleep.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/cookie_plugin.js"></script>
+<script src="js/shal.js"></script>
+</body>
+</html>

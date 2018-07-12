@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>showTasks</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            padding-top:60px;
+            padding-bottom:40px;
+        }
+        .success{
+            background-color: #5272e6;
+            font-size:16px;
+        }
+    </style>
+    <link rel='stylesheet' href='./css/style.css' />
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="js/lib/bootstrap-table.min.css">
+    <script src="js/layDate-v5.0.7/laydate/laydate.js"></script> <!--日历-->
+    <script src="./js/base.js"></script>
+</head>
+<body>
+
+<!--页面内容-->
+<div id="container">
+
+    <!--顶部栏目-->
+    <div class="navbar navbar-fixed-top" style="float:left;">
+        <img src="img/head1.gif" alt="head" style="width:100%;height:80px;">
+        <div style="margin-left:50px;margin-top:-100px;font-size:80px"><i>U-BACKUP</i><span style="font-size:40px;">  管理系统</span></div>
+        <div class="navbar-inner" style="background:black;margin-top:-25px">
+            <div class="container">
+                <div class="nav-collapse" ><br/>
+                    <p id="userName" style="float:left;margin:0 30px;color:#00bcf2"></p>
+                    <p id="home" style="float:left;margin-right:30px;color:#00bcf2">设备信息维护</p>
+                    <p id="supervise_task" style="float:left;margin-right:30px;color:#00bcf2">系统实时监控</p>
+                    <p id="userPasswordModify" style="float:left;color:#00bcf2">修改用户密码</p>
+                    <button type="button" id="top_bar3" style="float:right;color:#00bcf2;background:black;border:0">注销</button>
+                    <!--退出确认框（隐含）,需点击显示-->
+                    <div id='Out' style="height:100px;width:200px;background-color:#0c84e4;margin-left:66.5%;margin-top:40px;display:none;position:absolute;z-index:1">
+                        <div style="text-align: center;margin-top:2px;"><img src="./img/head.jpg" height="20" width="20"></div>
+                        <div><p style="text-align:center;margin:8px;color:white">确认退出？</p></div>
+                        <div>
+                            <div><button id="YesOut" style="float:left;margin:0 25px;">确定</button></div>
+                            <div><button id="NoOut" style="float:right;margin:0 25px;">取消</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--正文-->
+    <div  style="margin-top:10px;width:100%;float:left;">
+
+        <!--系统设备文件容器-->
+        <div style="margin-top:30px;">
+
+            <!--系统-->
+            <div id="system" class="hero-unit jumbotron container" style="margin-bottom:-10px;">
+                <div style="position:relative;">
+                    <!--选择用户,超级用户可选择用户，普通用户显示为当前用户-->
+                    <div style="margin-bottom:-20px;display:none" id="userSelected" >
+                        <div>
+                            当前用户:
+                            <select id="selectUser">
+                                <option>-- 请选择用户 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p style="text-align:center;margin-top:-10px;">选择系统</p>
+                    <table  id="getSystems" border="1" data-pagination="true" data-striped='true' >
+                        <thead>
+                        <tr>
+                            <th data-field="systemName" style="text-align: center">系统名</th>
+                            <th data-field="systemDescribe" style="text-align: center">系统描述</th>
+                            <th data-field="frequency" style="text-align: center">当前备份策略</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div><br/>
+
+            <!--设备-->
+            <div id="device" class="hero-unit jumbotron container" style="margin-bottom:-10px;display:none">
+                <div style="position:relative;">
+                    <div id="systemSelected" style="margin-bottom:-20px;" >
+                        <div style="float:left">
+                            当前选择系统：<h id="currentSystem" style="font-size: 20px"></h>
+                            <h style="display:none">当前系统ID：</h><h id="currentSystemID" style="display:none"></h>
+                        </div>
+                    </div>
+                    <p style="margin-left:45%;margin-top:-10px;">选择设备</p>
+                    <table  id="getDevices" border="1" data-pagination="true" data-striped='true'>
+                        <thead>
+                        <tr>
+                            <th data-field="deviceName" style="text-align: center">设备名</th>
+                            <th data-field="deviceDescribe" style="text-align: center">设备描述</th>
+                            <th data-field="deviceType" style="text-align: center">设备类型</th>
+                            <th data-field="ip" style="text-align: center">设备IP</th>
+                            <th data-field="devicePort" style="text-align: center">设备端口</th>
+                            <th data-field="deviceUsername" style="text-align: center">设备用户名</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div><br/>
+
+            <!--文件-->
+            <div id="file" class="hero-unit jumbotron container" style="margin-bottom:-10px;display:none">
+                <div style="position:relative;">
+                    <div id="deviceSelected" style="margin-bottom:-20px;" >
+                        <div style="float:left">
+                            当前选择设备：<h id="currentDevice" style="font-size: 20px"></h>
+                            设备类型：<h id="deviceType"></h>
+                            <h style="display:none">当前设备ID：</h><h id="currentDeviceID" style="display:none"></h>
+                        </div>
+                    </div>
+                    <p style="margin-left:45%;margin-top:-10px;">选择文件</p>
+                    <table  id="getFiles" border="1" data-pagination="true" data-striped='true'>
+                        <thead>
+                        <tr>
+                            <th data-field="filename" style="text-align: center">文件名</th>
+                            <th data-field="fileDescribe" style="text-align: center">文件描述</th>
+                            <th data-field="remotePath" style="text-align: center">远程地址</th>
+                            <th data-field="localPath" style="text-align: center">本地地址</th>
+                            <th data-field="routeCommand" style="text-align: center">路由命令</th>
+                            <th data-field="identifyKeywords" style="text-align: center">路由关键字</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+            <!--文件历史记录以及下载-->
+            <div id="fileHistory" class="hero-unit jumbotron container" style="margin-top:20px;display:none">
+                <div style="position:relative;">
+                    <p style="margin-left:40%;margin-top:-10px;">文件<strong id = "currentFileName"></strong>历史备份情况</p>
+                    <h style="display:none">当前文件ID：</h><h id="currentFileID" style="display:none"></h>
+                    <h style="display:none">当前文件地址：</h><h id="currentFileAdress" style="display:none"></h>
+                    <a href=""  download="" id="link" style="display:none;margin-left:10%" >请点此完成下载</a>
+                    <button style="margin-left:80%;margin-bottom:10px;" id="download" class="btn btn-primary btn-large">下载</button>
+                    <table  id="getTasks" border="1" data-pagination="true" data-striped='true'>
+                        <thead>
+                        <tr>
+                            <th data-field="taskTime" style="text-align: center">备份时间</th>
+                            <th data-field="state" style="text-align: center">备份状态</th>
+                            <th data-field="script" style="text-align: center">script</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div><br/>
+
+        </div>
+
+    </div>
+
+    <!--尾部-->
+    <div  class="navbar navbar-default navbar-fixed-bottom" style="background-color:#2e2e2e;">
+        <p style="text-align:center;padding-top:15px;color:lightblue"><a href="#">@copyright CXG </a>2017</p>
+    </div>
+
+</div>
+
+</div>
+<script src="js/UserHome.js"></script>  <!--页面正文js效果-->
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/layer-v3.1.0/layer/layer.js"></script>  <!--提示信息弹窗-->
+<script src="js/top_Button.js"></script>  <!--页面顶部的一系列按钮动作-->
+<script src="js/dropDownList.js"></script>  <!--下拉框-->
+<script src="js/lib/NoSleep.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/cookie_plugin.js"></script>
+<script src="js/reLoad.js"></script>
+
+</body>
+</html>

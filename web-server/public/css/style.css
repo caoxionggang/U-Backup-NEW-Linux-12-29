@@ -1,0 +1,17 @@
+body {
+  padding-top: 100px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#loginView{
+  text-align:center;
+}
+
+table{
+  margin:0 auto;
+  width:960px;
+}

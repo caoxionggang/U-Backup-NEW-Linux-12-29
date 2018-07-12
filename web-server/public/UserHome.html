@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>UserHome</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            padding-top:60px;
+            padding-bottom:40px;
+        }
+        .success{
+            background-color: #e61b0f;
+            font-size:16px;
+        }
+    </style>
+    <link rel='stylesheet' href='./css/style.css' />
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="js/lib/bootstrap-table.min.css">
+    <script src="js/layDate-v5.0.7/laydate/laydate.js"></script> <!--日历-->
+    <script src="./js/base.js"></script>
+</head>
+<body>
+
+<!--页面内容-->
+<div id="container">
+
+    <!--顶部栏目-->
+    <div class="navbar navbar-fixed-top" style="float:left;">
+        <img src="img/head1.gif" alt="head" style="width:100%;height:80px;">
+        <div style="margin-left:50px;margin-top:-100px;font-size:80px"><i>U-BACKUP</i><span style="font-size:40px;">  管理系统</span></div>
+        <div class="navbar-inner" style="background:black;margin-top:-25px">
+            <div class="container">
+                <div class="nav-collapse" ><br/>
+                    <p id="userName" style="float:left;margin:0 30px;color:#00bcf2"></p>
+                    <p id="home" style="float:left;margin-right:30px;color:#00bcf2">设备信息维护</p>
+                    <p id="supervise_task" style="float:left;margin-right:30px;color:#00bcf2">系统实时监控</p>
+                    <p id="userPasswordModify" style="float:left;color:#00bcf2">修改用户密码</p>
+                    <button type="button" id="top_bar3" style="float:right;color:#00bcf2;background:black;border:0">注销</button>
+                    <!--退出确认框（隐含）,需点击显示-->
+                    <div id='Out' style="height:100px;width:200px;background-color:#0c84e4;margin-left:66.5%;margin-top:40px;display:none;position:absolute;z-index:1">
+                        <div style="text-align: center;margin-top:2px;"><img src="./img/head.jpg" height="20" width="20"></div>
+                        <div><p style="text-align:center;margin:8px;color:white">确认退出？</p></div>
+                        <div>
+                            <div><button id="YesOut" style="float:left;margin:0 25px;">确定</button></div>
+                            <div><button id="NoOut" style="float:right;margin:0 25px;">取消</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--正文-->
+    <div  style="margin-top:10px;width:100%;float:left;">
+
+        <!--系统设备文件容器-->
+        <div style="margin-top:30px;">
+
+            <!--系统-->
+            <div id="system" class="hero-unit jumbotron container" style="margin-bottom:-10px;">
+                <div style="position:relative;">
+                    <!--选择用户,超级用户可选择用户，普通用户显示为当前用户-->
+                    <div style="margin-bottom:-20px;display:none" id="userSelected" >
+                        <div>
+                            当前用户:
+                            <select id="selectUser">
+                                <option>-- 请选择用户 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p style="text-align:center;margin-top:-10px;">选择系统</p>
+                    <table  id="getSystems" border="1" data-pagination="true" data-striped='true' >
+                        <thead>
+                        <tr>
+                            <th data-field="systemName" style="text-align: center">系统名</th>
+                            <th data-field="systemDescribe" style="text-align: center">系统描述</th>
+                            <th data-field="frequency" style="text-align: center">当前备份策略</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <button type="button" class="btn btn-info btn-sm" style="margin-left:5%;margin-top:5px" data-toggle="modal" data-target="#addSystem">添加系统</button>
+                    <div class="modal fade" id="addSystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header"><p style="font-size:30px;">添加系统</p></div>
+                                <div class="modal-body">
+                                    <table>
+                                        <tr>
+                                            <td style="width:150px"><p>系统名：</p></td>
+                                            <td><input id="add_systemName" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>系统描述：</p></td>
+                                            <td><input type="text" id="add_systemDescribe" style="color:blue;width:350px;height:40px;font-size:20px"></td>
+                                        </tr>
+                                    </table>
+                                    <p style="font-size:20px;color:red">注意：*号为必填项</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="deleteSystemData" class="btn btn-default" style="font-size:15px;margin-left:30px">清除数据</button>
+                                    <button id="add_confirm" type="button" class="btn btn-info" data-dismiss="modal">确定添加</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info btn-sm" style="margin-left:1%;margin-top:5px" data-toggle="modal" data-target="#modifySystem">编辑系统</button>
+                    <div class="modal fade" id="modifySystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;">
+                                    <div><b style="color:blue;">编辑系统</b></div>
+                                </div>
+                                <div class="modal-body">
+                                    <p style='color:red;font-size:15px;'>只允许编辑系统描述！</p>
+                                    <p><b>系统描述:&nbsp</b><input id="modify_systemDescribe" style="color:blue;font-size:20px"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="modify_system_confirm"  type="button" class="btn btn-info" data-dismiss="modal">确认编辑</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="systemdelete" type="button" class="btn btn-info btn-sm" style="margin-left:1%;margin-top:5px" data-toggle="modal" data-target="#deleteSystem">删除系统</button>
+                    <div class="modal fade" id="deleteSystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;text-align: center;"><b style="float:left;">删除整个系统？</b></div>
+                                <div class="modal-body">
+                                    <p><b>此操作将删除这个系统下所有设备以及文件，且不能恢复，请谨慎操作！</b></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="delete_system_confirm" type="button" class="btn btn-danger" data-dismiss="modal">确定删除</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h style="margin-left:20%;margin-top:5px">备份间隔:</h>
+                    <select id="Strategy" style="margin-left:1%;margin-top:5px">
+                        <option>一个月</option>
+                        <option>三个月</option>
+                    </select>
+                    <h style="margin-left:1%;margin-top:5px">备份次数:</h>
+                    <input id="system_backup_times" placeholder="次数" style="width:100px;margin-right:10px">
+                    <button id="strategyWrite" type="button" class="btn btn-info btn-sm" style="margin-left:1%;margin-top:5px" data-toggle="modal" data-target="#write_strategy">写入策略</button>
+                    <div class="modal fade" id="write_strategy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;text-align: center;"><b style="float:left;">请确认将写入的备份策略</b></div>
+                                <div class="modal-body">
+                                    <p><b>确认后，该系统下所有文件都将按照此策略来进行备份!</b></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="write_strategy_confirm" type="button" class="btn btn-info" data-dismiss="modal">确定写入</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div><br/>
+
+            <!--设备-->
+            <div id="device" class="hero-unit jumbotron container" style="margin-bottom:-10px;display:none">
+                <div style="position:relative;">
+                    <div id="systemSelected" style="margin-bottom:-20px;" >
+                        <div style="float:left">
+                            当前选择系统：<h id="currentSystem" style="font-size: 20px"></h>
+                            <h style="display:none">当前系统ID：</h><h id="currentSystemID" style="display:none"></h>
+                        </div>
+                    </div>
+                    <p style="margin-left:45%;margin-top:-10px;">选择设备</p>
+                    <table  id="getDevices" border="1" data-pagination="true" data-striped='true'>
+                        <thead>
+                        <tr>
+                            <th data-field="deviceName" style="text-align: center">设备名</th>
+                            <th data-field="deviceDescribe" style="text-align: center">设备描述</th>
+                            <th data-field="deviceType" style="text-align: center">设备类型</th>
+                            <th data-field="ip" style="text-align: center">设备IP</th>
+                            <th data-field="devicePort" style="text-align: center">设备端口</th>
+                            <th data-field="deviceUsername" style="text-align: center">设备用户名</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <button id="deviceadd" type="button" class="btn btn-info btn-sm" disabled="disabled" style="margin-left:5%;margin-top:5px" data-toggle="modal" data-target="#addDevice">添加设备</button>
+                    <div class="modal fade" id="addDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header"><p style="font-size:30px;">添加设备</p></div>
+                                <div class="modal-body">
+                                    <table>
+                                        <tr>
+                                            <td style="width:150px"><p>设备名：</p></td>
+                                            <td><input id="add_deviceName" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>设备描述：</p></td>
+                                            <td><input id="add_deviceDescribe" style="color:blue;width:350px;height:40px;font-size:20px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>设备类型：</p></td>
+                                            <td>
+                                                <select id="add_deviceType" style="color:blue;font-size:15px">
+                                                <option>设备类型</option>
+                                                <option>主机</option>
+                                                <option>路由器</option>
+                                                </select>*
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>设备IP地址：</p></td>
+                                            <td><input id="add_deviceipAddress" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr colspan="2">
+                                            <td><p id="IPwrong" style="font-size:15px;color:red;display:none">IP地址输入错误！</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>设备ssh端口：</p></td>
+                                            <td><input id="add_devicePort" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>设备用户名：</p></td>
+                                            <td><input id="add_deviceUserName" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>设备密码：</p></td>
+                                            <td><input id="add_devicePassword" type="password" style="color:blue;width:350px;height:40px;font-size:20px">*<button id="pasDis" class="btn btn-default" style="width:70px;height:40px"><p id="disappear" style="display:none">隐藏</p><p id="appear">显示</p></button></td>
+                                        </tr>
+                                    </table>
+                                    <p style="font-size:20px;color:red">注意：*号为必填项</p>
+                                    <p style="font-size:20px;color:red">请确保设备的参数正确再点击确认添加！如添加后发现错误，则直接删除整个设备，再添加一次！</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="deleteDeviceData" class="btn btn-default"style="font-size:15px;margin-left:30px">清除数据</button>
+                                    <button id="add_device_confirm" type="button" class="btn btn-info" data-dismiss="modal">确定添加</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="devicemodify" type="button"  class="btn btn-info btn-sm" disabled="disabled" style="margin-left:1%;margin-top:5px" data-toggle="modal" data-target="#modifyDevice">编辑设备</button>
+                    <div class="modal fade" id="modifyDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;">
+                                    <div><b style="color:blue;">编辑设备</b></div>
+                                </div>
+                                <div class="modal-body">
+                                    <p style='color:red;font-size:15px;'>只允许编辑设备描述！</p>
+                                    <p><b>设备描述:</b><input id="modify_deviceDescribe" style="color:blue;font-size:20px"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="modify_device_confirm"  type="button" class="btn btn-info" data-dismiss="modal">确认编辑</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="devicedelete" type="button" class="btn btn-info btn-sm" disabled="disabled" style="margin-left:1%;margin-top:5px" data-toggle="modal" data-target="#deleteDevice">删除设备</button>
+                    <div class="modal fade" id="deleteDevice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;text-align: center;"><b style="float:left;">删除整个设备？</b></div>
+                                <div class="modal-body">
+                                    <p><b>此操作将删除这个设备下所有文件，且不能恢复，请谨慎操作！</b></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="delete_device_confirm" type="button" class="btn btn-danger" data-dismiss="modal">确定删除</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br/>
+
+            <!--文件-->
+            <div id="file" class="hero-unit jumbotron container" style="margin-bottom:50px;display:none;">
+                <div style="position:relative;">
+                    <div id="deviceSelected" style="margin-bottom:-20px;" >
+                        <div style="float:left">
+                            当前选择设备：<h id="currentDevice" style="font-size: 20px"></h>
+                            设备类型：<h id="deviceType"></h>
+                            <h style="display:none">当前设备ID：</h><h id="currentDeviceID" style="display:none"></h>
+                        </div>
+                    </div>
+                    <p style="margin-left:45%;margin-top:-10px;">选择文件</p>
+                    <table  id="getFiles" border="1" data-pagination="true" data-striped='true'>
+                        <thead>
+                        <tr>
+                            <th data-field="filename" style="text-align: center">文件名</th>
+                            <th data-field="fileDescribe" style="text-align: center">文件描述</th>
+                            <th data-field="remotePath" style="text-align: center">远程地址</th>
+                            <th data-field="routeCommand" style="text-align: center">路由命令</th>
+                            <th data-field="identifyKeywords" style="text-align: center">路由关键字</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <button id="fileadd" type="button" class="btn btn-info btn-sm" disabled="disabled" style="margin-left:5%;margin-top:5px" data-toggle="modal" data-target="#addFile">添加文件</button>
+                    <div class="modal fade" id="addFile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div id="addfilename" class="modal-header" style="font-size:25px;"><p style="font-size:30px">添加文件</p></div>
+                                <div class="modal-body">
+                                    <table>
+                                        <tr>
+                                            <td style="width:150px"><p>文件名:</p></td>
+                                            <td><input id="add_fileName" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>文件描述:</p></td>
+                                            <td><input id="add_fileDescribe" style="color:blue;width:350px;height:40px;font-size:20px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>文件远程路径:</p></td>
+                                            <td><input id="add_fileabsoluteAddress" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <p id="device1"  style="font-size:15px;color:red;display:none">当前选择设备为<b>主机</b>设备，添加文件为<b>主机</b>文件，请填写<b>以上三项</b>！标注*为必填!</p>
+                                                <p id="device2" style="font-size:15px;color:red;display:none">当前选择设备为<b>路由器</b>设备，添加文件为<b>路由器</b>文件，请填写以下<b>两项</b>！标注*为必填!</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>路由命令:</p></td>
+                                            <td><input id="add_routeCommand" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>路由关键字:</p></td>
+                                            <td><input id="add_routeKeyword" style="color:blue;width:350px;height:40px;font-size:20px">*</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="deleteFileData" class="btn btn-default" style="font-size:15px;margin-left:30px">清除数据</button>
+                                    <button id="add_file_confirm" type="button" class="btn btn-info" data-dismiss="modal">确定添加</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="filemodify" type="button"  class="btn btn-info btn-sm" disabled="disabled" style="margin-left:1%;margin-top:5px" data-toggle="modal" data-target="#modifyFile">编辑文件</button>
+                    <div class="modal fade" id="modifyFile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;">
+                                    <div><b style="color:blue;" >编辑文件</b></div>
+                                </div>
+                                <div class="modal-body">
+                                    <!--<p style="color:red;font-size:15px">若放弃编辑，请点击关闭！勿点击确认编辑。</p>-->
+                                    <p style="color:red;font-size:15px">主机文件可编辑<b>文件描述</b>和<b>文件远程路径</b>,路由文件可编辑<b>路由命令</b>和<b>路由关键字</b></p>
+                                    <table>
+                                        <tr>
+                                            <td style="width:150px"><p>文件描述:</p></td>
+                                            <td><input id="modify_fileDescribe" style="color:blue;width:350px;height:40px;font-size:20px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>文件远程路径:</p></td>
+                                            <td><input id="modify_Remote_file" style="color:blue;width:350px;height:40px;font-size:20px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <p id="modify1"  style="font-size:15px;color:red;display:none">当前选择文件为<b>主机文件</b>，请填写<b>以上两项！</b></p>
+                                                <p id="modify2" style="font-size:15px;color:red;display:none">当前选择设备为<b>路由器文件</b>，请填写以下<b>两项！</b></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>路由命令:</p></td>
+                                            <td><input id="modify_routeCommand" style="color:blue;width:350px;height:40px;font-size:20px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px"><p>路由关键字:</p></td>
+                                            <td><input id="modify_routeKeyword" style="color:blue;width:350px;height:40px;font-size:20px"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="modify_file_confirm"  type="button" class="btn btn-info" data-dismiss="modal">确认编辑</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="filedelete" type="button" class="btn btn-info btn-sm" disabled="disabled" style="margin-left:1%;margin-top:5px" data-toggle="modal" data-target="#deleteFile">删除文件</button>
+                    <div class="modal fade" id="deleteFile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;text-align: center;"><b style="float:left;">删除文件？</b></div>
+                                <div class="modal-body">
+                                    <p><b>此操作将删除文件且不能恢复，请谨慎操作！</b></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="delete_file_confirm" type="button" class="btn btn-danger" data-dismiss="modal">确定删除</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--实时状态测试框-->
+                    <button id="Filetest" type="button" class="btn btn-success" data-toggle="modal" style="margin-left:1%;margin-top:5px" data-target="#test" onclick="update()">测试</button>
+                    <div class="modal fade" id="test" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="font-size:25px;text-align: center;">
+                                    <b style="float:left;">文件<h id="fileName" style="font-color:blue"></h>测试情况</b>
+                                    <h id="noFile" style="color:red">请先选择文件!</h>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea id="result_describe" class="form-control" style="background-color:black;height:280px;width:90%;color:white;margin-left:5%" disabled="disabled"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="sureButton" type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h style="font-size:15px;color:red;">添加文件后请点击<b>测试</b>按钮,测试添加的文件的信息是否正确!</h>
+
+                </div>
+            </div><br/>
+
+            <!--文件历史记录以及下载-->
+            <div class="hero-unit jumbotron container" style="margin-bottom:-10px;display:none">
+                <div style="position:relative;">
+                    <p style="margin-left:40%;margin-top:-10px;">文件<strong id = "currentFileName"></strong>历史备份情况</p>
+                    <h style="display:none">当前文件ID：</h><h id="currentFileID" style="display:none"></h>
+                    <h style="display:none">当前文件地址：</h><h id="currentFileAdress" style="display:none"></h>
+                    <a href=""  download="" id="link" style="display:none;margin-left:10%" >请点此完成下载</a>
+                    <button style="margin-left:80%;margin-bottom:10px;" id="download">下载</button>
+                    <table  id="getTasks" border="1" data-pagination="true" data-striped='true'>
+                        <thead>
+                        <tr>
+                            <th data-field="taskTime" style="text-align: center">备份时间</th>
+                            <th data-field="state" style="text-align: center">备份状态</th>
+                            <th data-field="script" style="text-align: center">script</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div><br/>
+
+        </div>
+
+    </div>
+
+    <!--尾部-->
+    <div  class="navbar navbar-default navbar-fixed-bottom" style="background-color:#2e2e2e;">
+        <p style="text-align:center;padding-top:15px;color:lightblue"><a href="#">@copyright CXG </a>2017</p>
+    </div>
+
+</div>
+
+</div>
+<script src="js/UserHome.js"></script>  <!--页面正文js效果-->
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/layer-v3.1.0/layer/layer.js"></script>  <!--提示信息弹窗-->
+<script src="js/top_Button.js"></script>  <!--页面顶部的一系列按钮动作-->
+<script src="js/dropDownList.js"></script>  <!--下拉框-->
+<script src="js/lib/NoSleep.min.js"></script>
+<script src="js/base.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/cookie_plugin.js"></script>
+<script src="js/reLoad.js"></script>
+<script src="js/devicePassEncrypt.js"></script>
+
+</body>
+</html>
